@@ -10,8 +10,28 @@ usersRouter.get('/', async (request, response) => {
 
 usersRouter.post('/', async (request, response) => {
   const body = request.body
+  const password = body.password
+
+  if (!password || password.trim().length === 0) {
+    return response.status(400).json({
+      error: 'password required'
+    })
+  }
+
+  if (password[0] === ' ' || password[password.length - 1] === ' '){
+    return response.status(400).json({
+      error: 'password can\'t start or end with space'
+    })
+  }
+
+  if (password.length < 3) {
+    return response.status(400).json({
+      error: 'password should be at least three characters long'
+    })
+  }
+
   const saltRounds = 10
-  const passwordHash = await bcrypt.hash(body.password, saltRounds)
+  const passwordHash = await bcrypt.hash(password, saltRounds)
 
   const user = new User({
     username: body.username,
