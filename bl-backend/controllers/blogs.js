@@ -17,21 +17,13 @@ blogsRouter.get('/:id', async (request, response) => {
     : response.status(404).end()
 })
 
-const getTokenFrom = request => {
-  const authorization = request.headers['authorization']
-
-  if (authorization && authorization.startsWith('Bearer')) {
-    return authorization.substring(7)
-  }
-  return null
-}
-
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
-  const token = getTokenFrom(request)
-  const decodedToken = jwt.verify(token, process.env.SECRET)
+  console.log('this is executed 1')
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  console.log('this is executed 2')
 
-  if (!(token && decodedToken.id)) {
+  if (!(request.token && decodedToken.id)) {
     return response
       .status(401)
       .json({ error: 'token missing or invalid' })
