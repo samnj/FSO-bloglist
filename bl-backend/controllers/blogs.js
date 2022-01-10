@@ -19,9 +19,7 @@ blogsRouter.get('/:id', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
-  console.log('this is executed 1')
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  console.log('this is executed 2')
 
   if (!(request.token && decodedToken.id)) {
     return response
@@ -46,8 +44,27 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-  await Blog.findByIdAndRemove(request.params.id)
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  const blogToDelete = await Blog.findById(request.params.id)
+  const user = await User.findById(decodedToken.id)
+
+  if (!blogToDelete) {
+    return response
+      .status(404)
+      .json({ error: 'the blog doesn\'t exist' })
+  } else if (user.id.toString() !== blogToDelete.user.toString()) {
+    return response
+      .status(403)
+      .json({ error: 'can\'t delete blogs that belong to other users' })
+  }
+
+  await blogToDelete.remove()
+
+  user.blogs = user.blogs.filter(blog => blog.toString() !== blogToDelete.id)
+  await user.save()
+
   response.status(204).end()
+
 })
 
 blogsRouter.put('/:id', async (request, response) => {
