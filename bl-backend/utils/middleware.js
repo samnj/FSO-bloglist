@@ -1,4 +1,6 @@
 const logger = require('./logger')
+const jwt = require('jsonwebtoken')
+const User = require('../models/user')
 
 const requestLogger = (request, response, next) => {
   logger.info('Method:', request.method)
@@ -15,6 +17,18 @@ const tokenExtractor = (request, response, next) => {
     request.token = authorization.substring(7)
   } else {
     request.token = null
+  }
+  next()
+}
+
+const userExtractor = async (request, response, next) => {
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  request.user = await User.findById(decodedToken.id)
+
+  if (!request.user) {
+    return response
+      .status(404)
+      .json({ error: 'token belongs to a user that doesn\'t exists anymore' })
   }
   next()
 }
@@ -47,4 +61,4 @@ const errorHandler = (error, request, response, next) => {
   next(error)
 }
 
-module.exports = { requestLogger, tokenExtractor, unknownEndpoint, errorHandler }
+module.exports = { requestLogger, tokenExtractor, userExtractor, unknownEndpoint, errorHandler }
