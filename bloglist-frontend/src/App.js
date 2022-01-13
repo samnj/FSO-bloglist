@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import Logout from './components/Logout'
 import Blogs from './components/Blogs'
 import LoginForm from './components/LoginForm'
 import CreateBlog from './components/CreateBlog'
@@ -55,7 +56,7 @@ const App = () => {
     setUser(null)
   }
 
-  const addBlog = (e) => {
+  const addBlog = async (e) => {
     e.preventDefault()
     const newBlog = {
       title: title,
@@ -63,38 +64,35 @@ const App = () => {
       url: url
     }
 
-    console.log('title', title)
-    console.log('author', author)
-    console.log('url', url)
-
-    blogService
-      .create(newBlog)
-      .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-        setTitle('')       
-        setAuthor('')
-        setUrl('')
-      })
-  }
-
-  const LoginFormProps = {
-    loginHandler,
-    username,
-    setUsername,
-    password,
-    setPassword
+    try {
+      const returnedBlog = await blogService.create(newBlog)
+      setBlogs(blogs.concat(returnedBlog))
+      setTitle('')       
+      setAuthor('')
+      setUrl('')
+    } catch (error) {
+      if (error.response.data.error === 'token expired') {
+        logoutHandler()
+      }
+      console.log(error.response.data.error)
+    }
   }
 
   if (user === null) {
     return (
-      <LoginForm {...LoginFormProps} />
+      <LoginForm {...{ loginHandler, username, setUsername, password, setPassword }} />
     )
   }
   
   return (
     <div>
-      <Blogs blogs={blogs} username={user.username} logoutHandler={logoutHandler} />
+      <h2>blogs</h2>
+      <Logout logoutHandler={logoutHandler} username={user.username} />
+
+      <h2>create new blog</h2>
       <CreateBlog {...{ addBlog, title, author, url, setTitle, setAuthor, setUrl }} />
+
+      <Blogs blogs={blogs} username={user.username} logoutHandler={logoutHandler} />
     </div>
   )
 }

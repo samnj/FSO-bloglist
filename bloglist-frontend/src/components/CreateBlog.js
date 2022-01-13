@@ -3,7 +3,6 @@ import React from 'react'
 const CreateBlog = ({ addBlog, title, author, url, setTitle, setAuthor, setUrl }) => {
   return (
     <form onSubmit={addBlog}>
-      <h2>create new</h2>
       <div>
         title
           <input
