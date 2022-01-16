@@ -9,9 +9,6 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
   useEffect(() => {
@@ -29,20 +26,15 @@ const App = () => {
     )  
   }, [])
 
-  const loginHandler = async (e) => {
-    e.preventDefault() 
+  const loginHandler = async (userData) => {
     try {
-      const user = await loginService.login({
-        username, password
-      })
+      const user = await loginService.login(userData)
       blogService.setToken(user.token)
       window.localStorage.setItem(
         'loggedUser', JSON.stringify(user)
       )
       
       setUser(user)
-      setUsername('')
-      setPassword('')
     } catch (exception) {
       console.log('wrong credentials')
     }
@@ -71,7 +63,7 @@ const App = () => {
 
   if (user === null) {
     return (
-      <LoginForm {...{ loginHandler, username, setUsername, password, setPassword }} />
+      <LoginForm loginHandler={loginHandler} />
     )
   }
   
