@@ -14,10 +14,6 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
-
   useEffect(() => {
     const loggedUserJson = window.localStorage.getItem('loggedUser')
     if (loggedUserJson) {
@@ -59,21 +55,12 @@ const App = () => {
 
   const addBlogRef = useRef()
 
-  const addBlog = async (e) => {
-    e.preventDefault()
-    const newBlog = {
-      title: title,
-      author: author || '',
-      url: url
-    }
-
+  const addBlog = async (newBlog) => {
     try {
       const returnedBlog = await blogService.create(newBlog)
       addBlogRef.current.toggleVisibility()
       setBlogs(blogs.concat(returnedBlog))
-      setTitle('')       
-      setAuthor('')
-      setUrl('')
+      
     } catch (error) {
       if (error.response.data.error === 'token expired') {
         logoutHandler()
@@ -95,7 +82,7 @@ const App = () => {
 
       <h2>create new blog</h2>
       <Togglable buttonLabel="create new blog" ref={addBlogRef}>
-        <CreateBlog {...{ addBlog, title, author, url, setTitle, setAuthor, setUrl }} />
+        <CreateBlog createBlog={addBlog} />
       </Togglable>
 
       <Blogs blogs={blogs} username={user.username} logoutHandler={logoutHandler} />
