@@ -9,7 +9,7 @@ const CreateBlog = ({ createBlog }) => {
     e.preventDefault()
     const newBlog = {
       title: title,
-      author: author || '',
+      author: author || 'author unknown',
       url: url
     }
     createBlog(newBlog)

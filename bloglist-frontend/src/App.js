@@ -36,7 +36,7 @@ const App = () => {
       
       setUser(user)
     } catch (exception) {
-      console.log('wrong credentials')
+      console.error('wrong credentials')
     }
   }
 
@@ -57,7 +57,16 @@ const App = () => {
       if (error.response.data.error === 'token expired') {
         logoutHandler()
       }
-      console.log(error.response.data.error)
+      console.error(error.response.data.error)
+    }
+  }
+
+  const addLike = async (id, blogToUpdate) => {
+    try {
+      const updatedBlog = await blogService.update(id, blogToUpdate)
+      setBlogs(blogs.map(blog => (blog.id === id ? updatedBlog : blog)))
+    } catch (error) {
+      console.error(error)
     }
   }
 
@@ -77,7 +86,7 @@ const App = () => {
         <CreateBlog createBlog={addBlog} />
       </Togglable>
 
-      <Blogs blogs={blogs} username={user.username} logoutHandler={logoutHandler} />
+      <Blogs blogs={blogs} addLike={addLike}/>
     </div>
   )
 }
