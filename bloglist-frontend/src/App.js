@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Logout from './components/Logout'
 import Blogs from './components/Blogs'
 import LoginForm from './components/LoginForm'
 import CreateBlog from './components/CreateBlog'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -56,6 +57,8 @@ const App = () => {
     setUser(null)
   }
 
+  const addBlogRef = useRef()
+
   const addBlog = async (e) => {
     e.preventDefault()
     const newBlog = {
@@ -66,6 +69,7 @@ const App = () => {
 
     try {
       const returnedBlog = await blogService.create(newBlog)
+      addBlogRef.current.toggleVisibility()
       setBlogs(blogs.concat(returnedBlog))
       setTitle('')       
       setAuthor('')
@@ -90,7 +94,9 @@ const App = () => {
       <Logout logoutHandler={logoutHandler} username={user.username} />
 
       <h2>create new blog</h2>
-      <CreateBlog {...{ addBlog, title, author, url, setTitle, setAuthor, setUrl }} />
+      <Togglable buttonLabel="create new blog" ref={addBlogRef}>
+        <CreateBlog {...{ addBlog, title, author, url, setTitle, setAuthor, setUrl }} />
+      </Togglable>
 
       <Blogs blogs={blogs} username={user.username} logoutHandler={logoutHandler} />
     </div>
