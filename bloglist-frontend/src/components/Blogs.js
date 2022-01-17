@@ -1,19 +1,19 @@
 import React, { useState } from 'react'
 
-const Blogs = ({ blogs, addLike }) => {
+const Blogs = ({ blogs, addLike, user, deleteHandler }) => {
 
   const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
   
   return (
   <div>
     {sortedBlogs.map(blog =>
-      <Blog key={blog.id} blog={blog} addLike={addLike} />
+      <Blog key={blog.id} blog={blog} addLike={addLike} user={user} deleteHandler={deleteHandler} />
     )}
   </div>
   )
 }
 
-const Blog = ({ blog, addLike }) => {
+const Blog = ({ blog, addLike, user, deleteHandler }) => {
   const [visible, setVisible] = useState(false)
 
   const blogStyle = {
@@ -36,6 +36,14 @@ const Blog = ({ blog, addLike }) => {
     addLike(blog.id, blogObject)
   }
 
+  const removeBlog = () => {
+    if (window.confirm('Are you sure you want to remove this blog?')) {
+      deleteHandler(blog.id)
+    }
+  }
+
+  const blogUser = blog.user[0].username
+
   return (
     <div style={blogStyle}>
       <div>
@@ -45,7 +53,10 @@ const Blog = ({ blog, addLike }) => {
       <div style={showDetails}>
         <div>URL: {blog.url}</div>
         <div>likes: {blog.likes} <button onClick={likeHandler}>like</button></div>
-        <div>user: {blog.user[0].username}</div>
+        <div>user: {blogUser}</div>
+        {user.username === blogUser &&
+          <button onClick={removeBlog}>remove</button>  
+        }
       </div>
     </div>
 )}

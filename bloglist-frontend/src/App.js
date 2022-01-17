@@ -70,6 +70,11 @@ const App = () => {
     }
   }
 
+  const deleteHandler = async (id) => {
+    await blogService.remove(id)
+    setBlogs(blogs.filter(blog => blog.id !== id))
+  }
+
   if (user === null) {
     return (
       <LoginForm loginHandler={loginHandler} />
@@ -86,7 +91,7 @@ const App = () => {
         <CreateBlog createBlog={addBlog} />
       </Togglable>
 
-      <Blogs blogs={blogs} addLike={addLike}/>
+      <Blogs blogs={blogs} addLike={addLike} user={user} deleteHandler={deleteHandler} />
     </div>
   )
 }
