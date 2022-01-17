@@ -3,9 +3,6 @@ import React, { useState } from 'react'
 const Blogs = ({ blogs, addLike }) => {
 
   const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
-
-  console.log(blogs)
-  console.log(sortedBlogs)
   
   return (
   <div>
@@ -35,9 +32,11 @@ const Blog = ({ blog, addLike }) => {
   }
 
   const likeHandler = () => {
-    const blogObject = { ...blog }
-    blogObject.likes += 1
+    // console.log(blog.user)
+    const blogObject = { ...blog, likes: blog.likes + 1 }
+    // console.log(blog.user)
     addLike(blog.id, blogObject)
+    // console.log(blog.user)
   }
 
   return (
