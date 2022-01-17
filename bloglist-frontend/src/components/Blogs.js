@@ -1,9 +1,15 @@
 import React, { useState } from 'react'
 
 const Blogs = ({ blogs, addLike }) => {
+
+  const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
+
+  console.log(blogs)
+  console.log(sortedBlogs)
+  
   return (
   <div>
-    {blogs.map(blog =>
+    {sortedBlogs.map(blog =>
       <Blog key={blog.id} blog={blog} addLike={addLike} />
     )}
   </div>
