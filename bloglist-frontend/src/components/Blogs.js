@@ -32,11 +32,8 @@ const Blog = ({ blog, addLike }) => {
   }
 
   const likeHandler = () => {
-    // console.log(blog.user)
     const blogObject = { ...blog, likes: blog.likes + 1 }
-    // console.log(blog.user)
     addLike(blog.id, blogObject)
-    // console.log(blog.user)
   }
 
   return (

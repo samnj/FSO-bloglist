@@ -63,9 +63,7 @@ const App = () => {
 
   const addLike = async (id, blogToUpdate) => {
     try {
-      console.log(blogToUpdate)
       const updatedBlog = await blogService.update(id, blogToUpdate)
-      console.log(updatedBlog)
       setBlogs(blogs.map(blog => (blog.id === id ? updatedBlog : blog)))
     } catch (error) {
       console.error(error)
