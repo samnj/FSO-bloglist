@@ -3,13 +3,13 @@ import React, { useState } from 'react'
 const Blogs = ({ blogs, addLike, user, deleteHandler }) => {
 
   const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
-  
+
   return (
-  <div>
-    {sortedBlogs.map(blog =>
-      <Blog key={blog.id} blog={blog} addLike={addLike} user={user} deleteHandler={deleteHandler} />
-    )}
-  </div>
+    <div>
+      {sortedBlogs.map(blog =>
+        <Blog key={blog.id} blog={blog} addLike={addLike} user={user} deleteHandler={deleteHandler} />
+      )}
+    </div>
   )
 }
 
@@ -55,10 +55,10 @@ const Blog = ({ blog, addLike, user, deleteHandler }) => {
         <div>likes: {blog.likes} <button onClick={likeHandler}>like</button></div>
         <div>user: {blogUser}</div>
         {user.username === blogUser &&
-          <button onClick={removeBlog}>remove</button>  
+          <button onClick={removeBlog}>remove</button>
         }
       </div>
     </div>
-)}
+  )}
 
 export default Blogs

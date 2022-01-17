@@ -23,7 +23,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   const loginHandler = async (userData) => {
@@ -33,7 +33,7 @@ const App = () => {
       window.localStorage.setItem(
         'loggedUser', JSON.stringify(user)
       )
-      
+
       setUser(user)
     } catch (exception) {
       console.error('wrong credentials')
@@ -52,7 +52,7 @@ const App = () => {
       const returnedBlog = await blogService.create(newBlog)
       addBlogRef.current.toggleVisibility()
       setBlogs(blogs.concat(returnedBlog))
-      
+
     } catch (error) {
       if (error.response.data.error === 'token expired') {
         logoutHandler()
@@ -80,7 +80,7 @@ const App = () => {
       <LoginForm loginHandler={loginHandler} />
     )
   }
-  
+
   return (
     <div>
       <h2>blogs</h2>

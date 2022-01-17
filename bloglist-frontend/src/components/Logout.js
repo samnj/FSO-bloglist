@@ -8,7 +8,7 @@ const Logout = ({ logoutHandler, username }) => {
         logout
       </button>
     </div>
-)
+  )
 }
 
 export default Logout

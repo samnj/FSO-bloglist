@@ -1,4 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
 import axios from 'axios'
 const baseUrl = '/api/blogs'
 let token = null
@@ -34,4 +33,6 @@ const remove = async (id) => {
   await axios.delete(`${baseUrl}/${id}`, config)
 }
 
-export default { getAll, create, update, remove, setToken }
+const data = { getAll, create, update, remove, setToken }
+
+export default data
