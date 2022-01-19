@@ -87,7 +87,7 @@ const App = () => {
       <Logout logoutHandler={logoutHandler} username={user.username} />
 
       <h2>create new blog</h2>
-      <Togglable buttonLabel="create new blog" ref={addBlogRef}>
+      <Togglable buttonLabel="new blog" ref={addBlogRef}>
         <CreateBlog createBlog={addBlog} />
       </Togglable>
 
